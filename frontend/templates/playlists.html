@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Your Playlists - Spotify App{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4">
+    <h1 class="text-3xl font-bold mb-6">Your Playlists</h1>
+    
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        {% if playlists and playlists['items'] %}
+            {% for playlist in playlists['items'] %}
+                <div class="bg-[#282828] p-4 rounded-lg hover:bg-[#383838] transition group">
+                    {% if playlist.type == 'liked_songs' %}
+                        <!-- Liked Songs -->
+                        <a href="/liked-songs" class="block">
+                            <div class="relative aspect-square mb-4 bg-gradient-to-br from-[#450af5] to-[#c4efd9] rounded-lg overflow-hidden">
+                                <img src="{{ playlist.images[0].url }}" 
+                                     alt="Liked Songs"
+                                     class="w-full h-full object-cover">
+                            </div>
+                            <h3 class="font-bold text-lg group-hover:text-green-500 transition">
+                                {{ playlist.name }}
+                            </h3>
+                            <p class="text-gray-400 text-sm">
+                                {{ playlist.tracks.total }} tracks
+                            </p>
+                        </a>
+                    {% else %}
+                        <!-- Regular Playlist -->
+                        <a href="/playlist/{{ playlist.id }}" class="block">
+                            {% if playlist.images and playlist.images|length > 0 %}
+                                <div class="aspect-square mb-4 bg-[#383838] rounded-lg overflow-hidden">
+                                    <img src="{{ playlist.images[0].url }}" 
+                                         alt="{{ playlist.name }}"
+                                         class="w-full h-full object-cover">
+                                </div>
+                            {% else %}
+                                <div class="aspect-square mb-4 bg-[#383838] rounded-lg flex items-center justify-center">
+                                    <span class="text-4xl">🎵</span>
+                                </div>
+                            {% endif %}
+                            
+                            <h3 class="font-bold text-lg group-hover:text-green-500 transition">
+                                {{ playlist.name }}
+                            </h3>
+                            
+                            <p class="text-gray-400 text-sm">
+                                {% if playlist.tracks and playlist.tracks.total %}
+                                    {{ playlist.tracks.total }} tracks
+                                {% else %}
+                                    0 tracks
+                                {% endif %}
+                            </p>
+                        </a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-span-full text-center text-gray-400 py-8">
+                No playlists found
+            </div>
+        {% endif %}
+    </div>
+
+    {% if playlists and playlists['total'] and playlists['total'] > playlists['limit'] %}
+        <div class="mt-8 flex justify-center space-x-4">
+            {% if playlists['offset'] > 0 %}
+                <a href="?offset={{ playlists['offset'] - playlists['limit'] }}"
+                   class="bg-[#383838] px-4 py-2 rounded-full hover:bg-[#484848] transition">
+                    Previous
+                </a>
+            {% endif %}
+            
+            {% if (playlists['offset'] + playlists['limit']) < playlists['total'] %}
+                <a href="?offset={{ playlists['offset'] + playlists['limit'] }}"
+                   class="bg-[#383838] px-4 py-2 rounded-full hover:bg-[#484848] transition">
+                    Next
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

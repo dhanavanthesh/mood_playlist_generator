@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Your Library - Spotify App{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4">
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-6">Followed Artists</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {% if library.followed_artists %}
+                {% for artist in library.followed_artists %}
+                    <div class="bg-[#282828] p-4 rounded-lg text-center hover:bg-[#383838] transition">
+                        {% if artist.images %}
+                            <img 
+                                src="{{ artist.images[0].url }}" 
+                                alt="{{ artist.name }}" 
+                                class="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg"
+                            >
+                        {% else %}
+                            <div class="w-32 h-32 bg-[#383838] rounded-full mx-auto mb-4 flex items-center justify-center">
+                                <span class="text-4xl">👤</span>
+                            </div>
+                        {% endif %}
+                        
+                        <a 
+                            href="{{ artist.external_urls.spotify }}" 
+                            target="_blank" 
+                            class="font-bold text-lg hover:text-green-500 transition block"
+                        >
+                            {{ artist.name }}
+                        </a>
+                        
+                        {% if artist.followers %}
+                            <p class="text-gray-400 text-sm mt-1">
+                                {{ "{:,}".format(artist.followers.total) }} followers
+                            </p>
+                        {% endif %}
+                        
+                        {% if artist.genres %}
+                            <p class="text-gray-500 text-sm mt-1">
+                                {{ artist.genres[0] }}
+                            </p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-span-full text-center text-gray-400 p-8">
+                    No followed artists found
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}

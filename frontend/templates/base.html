@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Spotify App{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="bg-black text-white min-h-screen">
+    <nav class="bg-[#121212] p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-green-500">Spotify App</a>
+            <div class="space-x-4">
+                {% if user %}
+                    <a href="/profile" class="hover:text-green-500">Profile</a>
+                    <a href="/playlists" class="hover:text-green-500">Playlists</a>
+                    <a href="/library" class="hover:text-green-500">Library</a>
+                    <a href="/logout" class="hover:text-green-500">Logout</a>
+                {% else %}
+                    <a href="/auth/spotify" class="hover:text-green-500">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto py-8">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

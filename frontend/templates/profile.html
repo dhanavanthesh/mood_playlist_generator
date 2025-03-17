@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - Spotify App{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-[#282828] rounded-lg p-8">
+        <div class="flex items-center space-x-8">
+            {% if user.images and user.images[0] %}
+            <img src="{{ user.images[0].url }}" 
+                 alt="{{ user.display_name }}" 
+                 class="w-48 h-48 rounded-full">
+            {% else %}
+            <div class="w-48 h-48 rounded-full bg-[#383838] flex items-center justify-center">
+                <span class="text-6xl">👤</span>
+            </div>
+            {% endif %}
+            <div>
+                <h1 class="text-4xl font-bold mb-2">{{ user.display_name }}</h1>
+                <p class="text-gray-400">{{ user.email }}</p>
+                <div class="mt-4">
+                    <a href="{{ user.external_urls.spotify }}" 
+                       target="_blank"
+                       class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+                        Open in Spotify
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

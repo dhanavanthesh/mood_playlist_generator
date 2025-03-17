@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Spotify App{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[70vh]">
+    <h1 class="text-6xl font-bold mb-8">Welcome to Spotify App</h1>
+    {% if not user %}
+    <a href="/auth/spotify" 
+       class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-full text-xl transition duration-300">
+        Connect with Spotify
+    </a>
+    {% else %}
+    <div class="text-center">
+        <h2 class="text-2xl mb-4">Welcome back, {{ user.display_name }}!</h2>
+        <div class="space-y-4">
+            <a href="/profile" 
+               class="block bg-[#282828] hover:bg-[#383838] text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                View Profile
+            </a>
+            <a href="/playlists" 
+               class="block bg-[#282828] hover:bg-[#383838] text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                Your Playlists
+            </a>
+            <a href="/library" 
+               class="block bg-[#282828] hover:bg-[#383838] text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                Your Library
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Error Container -->
+            <div id="errorContainer" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded-md"></div>
+
+            <!-- Mood Input Section -->
+            <div class="bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+                <h1 class="text-3xl font-bold mb-6 text-white">Create Your Mood Playlist</h1>
+                <form id="moodForm" class="space-y-6">
+                    <div>
+                        <label class="block text-gray-300 mb-2">How are you feeling?</label>
+                        <textarea 
+                            id="moodText" 
+                            class="w-full p-3 border rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-green-500 transition-all duration-200"
+                            rows="3"
+                            placeholder="Example: I need an energetic playlist for my morning run..."
+                            required
+                        ></textarea>
+                    </div>
+
+                <!-- Mood Detection Result -->
+                {% comment %} <div id="moodResult" class="hidden bg-gray-50 p-4 rounded-lg">
+                    <div class="flex items-center space-x-4">
+                        <img id="moodIcon" src="" alt="Mood Icon" class="w-12 h-12"
+                        onerror="this.src=this.src.replace('.png', '.svg');">                        <div>
+                            <div class="flex items-center space-x-2">
+                                <p class="font-semibold">Detected Mood: <span id="detectedMood"></span></p>
+                                <span id="confidenceIndicator" class="text-sm text-green-600"></span>
+                            </div>
+                            <p class="text-gray-600">Context: <span id="detectedContext"></span></p>
+                        </div>
+                    </div>
+                </div> {% endcomment %}
+
+                <button type="submit" class="w-full bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200">
+                    Generate Playlist
+                </button>
+            </form>
+        </div>
+
+        <!-- Loading Animation -->
+        <div id="loadingSection" class="hidden">
+            <div class="flex items-center justify-center space-x-4 bg-white rounded-lg shadow-md p-6">
+                <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-500 border-t-transparent"></div>
+                <p class="text-gray-600 text-lg">Creating your personalized playlist...</p>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        {% comment %} <div id="resultsSection" class="hidden space-y-8">
+            <!-- Playlist Info -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 id="playlistName" class="text-2xl font-bold"></h2>
+                        <p id="playlistDescription" class="text-gray-600"></p>
+                    </div>
+                    <button 
+                        id="savePlaylistBtn"
+                        class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200"
+                    >
+                        Save to Spotify
+                    </button>
+                </div>
+
+                <!-- Audio Features Controls -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="flex justify-between items-center text-sm font-medium text-gray-700 mb-2">
+                            Energy
+                            <span id="energyValue" class="text-gray-500"></span>
+                        </label>
+                        <input 
+                            type="range" 
+                            id="energySlider" 
+                            min="0" 
+                            max="100" 
+                            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-500"
+                            data-tooltip="Adjust the energy level of the songs"
+                        >
+                    </div>
+                    <div>
+                        <label class="flex justify-between items-center text-sm font-medium text-gray-700 mb-2">
+                            Tempo (BPM)
+                            <span id="tempoValue" class="text-gray-500"></span>
+                        </label>
+                        <input 
+                            type="range" 
+                            id="tempoSlider" 
+                            min="60" 
+                            max="180" 
+                            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-500"
+                            data-tooltip="Adjust the tempo of the songs"
+                        >
+                    </div>
+                    <div>
+                        <label class="flex justify-between items-center text-sm font-medium text-gray-700 mb-2">
+                            Danceability
+                            <span id="danceabilityValue" class="text-gray-500"></span>
+                        </label>
+                        <input 
+                            type="range" 
+                            id="danceabilitySlider" 
+                            min="0" 
+                            max="100" 
+                            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-500"
+                            data-tooltip="Adjust how suitable songs are for dancing"
+                        >
+                    </div>
+                    <div>
+                        <label class="flex justify-between items-center text-sm font-medium text-gray-700 mb-2">
+                            Mood Positivity
+                            <span id="valenceValue" class="text-gray-500"></span>
+                        </label>
+                        <input 
+                            type="range" 
+                            id="valenceSlider" 
+                            min="0" 
+                            max="100" 
+                            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-500"
+                            data-tooltip="Adjust the musical positiveness of the songs"
+                        >
+                    </div>
+                </div>
+
+                <!-- Tracks List -->
+                <div id="tracksList" class="space-y-2 max-h-96 overflow-y-auto pr-2"></div>
+            </div>
+
+            <!-- SHAP Explanations -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Why These Songs?</h2>
+                <div id="shapExplanations" class="w-full" style="min-height: 300px;"></div>
+            </div>
+        </div> {% endcomment %}
+    </div>
+</div>
+
+<!-- Tooltip Template -->
+<template id="tooltipTemplate">
+    <div class="absolute bg-black text-white px-2 py-1 text-xs rounded transform -translate-y-full -translate-x-1/2 mt-1 z-50"></div>
+</template>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="{{ url_for('static', path='/js/mood_generator.js') }}"></script>
+{% endblock %}
