@@ -24,7 +24,7 @@ The system extracts the mood, context, and audio preferences (e.g., tempo, energ
 
 ### 2️⃣ Clone the Repository
 ```bash
-git clone https://github.com/yourusername/mood-playlist-generator.git
+git clone https://github.com/dhanavanthesh/mood-playlist-generator.git
 cd mood-playlist-generator
 ```
 
