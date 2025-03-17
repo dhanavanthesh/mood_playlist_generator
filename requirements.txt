@@ -1,8 +1,6 @@
-# Build Dependencies
 setuptools>=68.0.0
 wheel>=0.42.0
 
-# Core Framework Dependencies
 fastapi==0.109.1
 uvicorn[standard]==0.27.0
 streamlit==1.31.0
@@ -10,44 +8,35 @@ python-dotenv==1.0.0
 pydantic==2.6.1
 pydantic-settings==2.1.0
 
-# Spotify Integration
 spotipy==2.23.0
 requests==2.31.0
 
-# Machine Learning and Data Processing
 transformers==4.37.2
 numpy==1.24.3
 pandas==2.1.4
 scikit-learn==1.3.2
 shap==0.44.0
 
-# NLP Dependencies
 tokenizers==0.15.1
 sentencepiece==0.1.99
 protobuf==4.25.2
 
-# Visualization
 plotly==5.18.0
 matplotlib==3.8.2
 
-# Development and Testing
 pytest==7.4.4
 black==24.1.1
 flake8==7.0.0
 isort==5.13.2
 
-# API Documentation and Auth
 python-multipart==0.0.6
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 
-# Performance and Caching
 httpx==0.26.0
 
-# Security
 bcrypt==4.1.2
 cryptography==42.0.1
 
-# Web Support
 aiofiles==23.2.1
 jinja2==3.1.3
